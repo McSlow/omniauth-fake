@@ -2,8 +2,8 @@ require 'omniauth'
 require 'yaml'
 
 #Monkey patching...
-module OmniAuth
-  class Form
+module OmniAuthGet
+  refine OmniAuth::Form do
     def header(title, header_info)
       @html << <<-HTML
       <!DOCTYPE html>
@@ -22,31 +22,11 @@ module OmniAuth
     end 
   end
 end
+
 module OmniAuth
   module Strategies
-
-    #Monkey patching...
-    module OmniAuth
-      class Form
-        def header(title, header_info)
-          @html << <<-HTML
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>#{title}</title>
-          #{css}
-          #{header_info}
-      </head>
-      <body>
-      <h1>#{title}</h1>
-      <form method='get' #{"action='#{options[:url]}' " if options[:url]}noValidate='noValidate'>
-          HTML
-          self
-        end 
-      end
-    end
     class Fake
+      using OmniAuthGet
       include OmniAuth::Strategy
 
       option :dotfiles, [File.join(ENV['HOME'], '.omniauth-fake')]

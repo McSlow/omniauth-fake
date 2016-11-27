@@ -23,10 +23,10 @@ module OmniAuthGet
   end
 end
 
+using OmniAuthGet
 module OmniAuth
   module Strategies
     class Fake
-      using OmniAuthGet
       include OmniAuth::Strategy
 
       option :dotfiles, [File.join(ENV['HOME'], '.omniauth-fake')]
